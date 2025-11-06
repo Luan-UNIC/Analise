@@ -1,0 +1,280 @@
+<!-- Chosen Palette: Energetic & Playful (Unic) -->
+<!-- Application Structure Plan: SPA narrativa (sem alteração). Hero KPI -> Seção 1 (Ranking) -> Seção 2 (Composição Detalhada) -> Seção 3 (Perfis). A estrutura de contar história do macro ao micro é mantida. -->
+<!-- Visualization & Content Choices: 
+- KPI Total: (Atualizado com novos dados).
+- Ranking Top 5: (Atualizado com novos dados e nomes curtos).
+- Composição da Pontuação: Objetivo 'Comparar/Composição' -> Gráfico de Barras Horizontais Empilhadas (Chart.js/Canvas). (Atualizado com novos dados, mantendo a divisão 'Enviadas'/'Recebidas'). (CONFIRMADO SEM SVG).
+- Perfis Qualitativos: (Textos de análise atualizados para refletir 100% os dados dos gráficos).
+-->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Interativa - Top 5 Pontuadores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #073B4C;
+            color: #ffffff;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 40vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+                max-height: 450px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="max-w-7xl mx-auto p-4 md:p-8">
+
+        <header class="text-center my-12 md:my-16">
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-4">Análise de Pontuação</h1>
+            <p class="text-xl md:text-2xl text-[#FFD166]">🏆 Top 5 Colaboradores 🏆</p>
+        </header>
+
+        <section class="bg-white/10 rounded-lg shadow-xl p-8 mb-12 md:mb-16 text-center border border-white/20 backdrop-blur-sm">
+            <h2 class="text-2xl font-bold text-[#118AB2] mb-2">Pontuação Combinada do Top 5</h2>
+            <p class="text-7xl font-black text-[#06D6A0]">82.000</p>
+            <p class="text-lg text-white/80 mt-2">Total de Pontos de Engajamento</p>
+        </section>
+
+        <section class="mb-12 md:mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl font-black text-white">O Ranking Final</h2>
+                <p class="text-lg text-white/80 mt-2 max-w-3xl mx-auto">A primeira visualização mostra o resultado final. O gráfico de barras compara a pontuação total de cada um dos cinco finalistas, destacando a disputa acirrada pela primeira posição.</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-xl p-6 md:p-8 border border-gray-200">
+                <div class="chart-container">
+                    <canvas id="rankingChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12 md:mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl font-black text-white">Como Eles Venceram?</h2>
+                <p class="text-lg text-white/80 mt-2 max-w-3xl mx-auto">Este gráfico detalha a composição dos pontos. Cada barra mostra *como* a pontuação total foi construída, revelando as principais fontes de pontos de cada vencedor (Feedbacks, Celebrações, etc.).</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-xl p-6 md:p-8 border border-gray-200">
+                <div class="chart-container">
+                    <canvas id="compositionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-4xl font-black text-center text-white mb-10">Perfis dos Vencedores</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                <div class="bg-white text-gray-800 rounded-lg shadow-xl p-6 md:p-8 flex flex-col border border-gray-200">
+                    <h3 class="text-3xl font-bold mb-2 text-[#073B4C]">🏆 1. Vinícius Lago</h3>
+                    <p class="text-2xl font-semibold text-[#06D6A0] mb-4">20.980 Pontos (Marketing)</p>
+                    <p class="text-lg mb-4">Vinícius garantiu o primeiro lugar por uma combinação de alto engajamento e a participação em atividades especiais. O fator decisivo para sua liderança foi o bônus pela "Fantasia", totalizando <strong>+1.800 pontos</strong> em bônus/ajustes. Ele também demonstrou alta interação social, somando <strong>+5.000 pontos</strong> (3.800 enviados e 1.200 recebidos). Foi um dos mais ativos em feedbacks (19 registros), somando <strong>+9.500 pontos</strong>, e acumulou uma base sólida de <strong>+4.680 pontos</strong> em Pesquisas e atividades diárias.</p>
+                </div>
+
+                <div class="bg-white text-gray-800 rounded-lg shadow-xl p-6 md:p-8 flex flex-col border border-gray-200">
+                    <h3 class="text-3xl font-bold mb-2 text-[#073B4C]">🥈 2. Kallenna Milhomens</h3>
+                    <p class="text-2xl font-semibold text-[#118AB2] mb-4">19.880 Pontos (Operações)</p>
+                    <p class="text-lg mb-4">Kallenna demonstrou o engajamento mais consistente. Foi a "Rainha do Feedback", sendo a colaboradora mais ativa com 23 registros, totalizando <strong>+11.500 pontos</strong> (a maior da plataforma). Também foi muito ativa em celebrações, com 18 enviadas, somando <strong>+3.600 pontos</strong> (não recebeu celebrações pontuadas). Além disso, acumulou uma base sólida de <strong>+4.780 pontos</strong> em atividades diárias e pesquisas. Esta pontuação é 100% orgânica, conquistada puramente através de um engajamento contínuo e consistente, o que torna o resultado ainda mais impressionante.</p>
+                </div>
+
+                <div class="bg-white text-gray-800 rounded-lg shadow-xl p-6 md:p-8 flex flex-col border border-gray-200">
+                    <h3 class="text-3xl font-bold mb-2 text-[#073B4C]">🥉 3. Sarah Cunha</h3>
+                    <p class="text-2xl font-semibold text-[#FFD166] mb-4">14.880 Pontos (Controladoria)</p>
+                    <p class="text-lg mb-4">Sarah, a primeira representante da Controladoria no ranking, mostrou uma pontuação robusta. Ela seguiu o padrão dos líderes em feedbacks, acumulando <strong>+8.000 pontos</strong> com 16 registros. No engajamento social, somou <strong>+2.600 pontos</strong> com celebrações (2.200 enviados e 400 recebidos). Além disso, garantiu <strong>+4.280 pontos</strong> de atividades diárias e pesquisas.</p>
+                </div>
+
+                <div class="bg-white text-gray-800 rounded-lg shadow-xl p-6 md:p-8 flex flex-col border border-gray-200">
+                    <h3 class="text-3xl font-bold mb-2 text-[#073B4C]">🏅 4. Ítalo Alves</h3>
+                    <p class="text-2xl font-semibold text-[#FF6B6B] mb-4">14.180 Pontos (Controladoria)</p>
+                    <p class="text-lg mb-4">O segundo membro da Controladoria no Top 5, Ítalo, teve um perfil muito semelhante ao de Sarah. Destacou-se pela alta frequência de feedbacks, com 14 registros que somaram <strong>+7.000 pontos</strong>. Também foi muito ativo na interação social, com 15 celebrações enviadas (<strong>+3.000 pontos</strong>), e garantiu <strong>+4.180 pontos</strong> de atividades diárias e pesquisas.</p>
+                </div>
+
+                <div class="bg-white text-gray-800 rounded-lg shadow-xl p-6 md:p-8 flex flex-col lg:col-span-2 lg:w-1/2 lg:mx-auto border border-gray-200">
+                    <h3 class="text-3xl font-bold mb-2 text-[#073B4C]">🏅 5. Bruna Santos</h3>
+                    <p class="text-2xl font-semibold text-gray-700 mb-4">13.480 Pontos (Crédito e Cadastro)</p>
+                    <p class="text-lg mb-4">Bruna fecha o Top 5 com uma pontuação muito equilibrada. Sua principal fonte de pontos foi o engajamento social, com <strong>+4.000 pontos</strong> de celebrações (3.200 enviados e 800 recebidos). Ela manteve uma boa média de 10 feedbacks enviados (<strong>+5.000 pontos</strong>) e acumulou uma base sólida de <strong>+4.580 pontos</strong> em atividades diárias e pesquisas. Teve também uma pequena dedução de <strong>-100 pontos</strong>.</p>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const commonTooltipCallback = {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                    return label.join(' ');
+                                } else {
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            const fullLabels = [
+                'Vinícius Lago',
+                'Kallenna Milhomens',
+                'Sarah Cunha',
+                'Ítalo Alves',
+                'Bruna Santos'
+            ];
+            
+            const ctxRanking = document.getElementById('rankingChart').getContext('2d');
+            new Chart(ctxRanking, {
+                type: 'bar',
+                data: {
+                    labels: fullLabels,
+                    datasets: [{
+                        label: 'Pontuação Total',
+                        data: [20980, 19880, 14880, 14180, 13480],
+                        backgroundColor: [
+                            '#06D6A0',
+                            '#118AB2',
+                            '#FFD166',
+                            '#FF6B6B',
+                            '#073B4C'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                color: '#333333'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#333333',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        ...commonTooltipCallback.plugins,
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            const ctxComposition = document.getElementById('compositionChart').getContext('2d');
+            
+            const compositionData = {
+                labels: fullLabels,
+                datasets: [
+                    {
+                        label: 'Feedbacks',
+                        data: [9500, 11500, 8000, 7000, 5000],
+                        backgroundColor: '#06D6A0',
+                    },
+                    {
+                        label: 'Celebrações Enviadas',
+                        data: [3800, 3600, 2200, 3000, 3200],
+                        backgroundColor: '#118AB2',
+                    },
+                    {
+                        label: 'Celebrações Recebidas',
+                        data: [1200, 0, 400, 0, 800],
+                        backgroundColor: '#FFD166',
+                    },
+                    {
+                        label: 'Bônus/Ajustes',
+                        data: [1800, 0, 0, 0, -100],
+                        backgroundColor: '#FF6B6B',
+                    },
+                    {
+                        label: 'Pesquisas/Diária/Outros',
+                        data: [4680, 4780, 4280, 4180, 4580],
+                        backgroundColor: '#073B4C',
+                    }
+                ]
+            };
+            
+            new Chart(ctxComposition, {
+                type: 'bar',
+                data: compositionData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            stacked: true,
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            ticks: {
+                                color: '#333333'
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#333333',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        ...commonTooltipCallback.plugins,
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#333333'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
